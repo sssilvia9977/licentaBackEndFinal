@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class SessionID {
 
-    private String sessionId;
+    private int sessionId;
     private String username;
     private String password;
 
@@ -20,5 +20,7 @@ public class SessionID {
     private String assigDeadline;
     private String assigDescription;
 
+    private int scheduleDay;
+    private String scheduleDate;
 
 }

@@ -3,6 +3,7 @@ package com.proiect.licenta.controller;
 import com.proiect.licenta.dto.*;
 import com.proiect.licenta.entities.*;
 import com.proiect.licenta.entities.choices.AssigStatus;
+import com.proiect.licenta.entities.choices.DaysOfWeek;
 import com.proiect.licenta.services.*;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -30,8 +31,8 @@ public class UserDetailsController {
     public AppUserDTO returnUsername(@RequestBody SessionID sessionID){
 
         AppUserDTO appUserDTO = new AppUserDTO();
-        String idIntermediat = sessionID.getSessionId().substring(1, sessionID.getSessionId().length()-1);
-        int id = Integer.parseInt(idIntermediat);
+        int id = sessionID.getSessionId();
+
         if(appUserService.findAppUserById(id).isPresent()){
             AppUser appUser = appUserService.findAppUserById(id).get();
 
@@ -52,8 +53,7 @@ public class UserDetailsController {
     public List<CourseDTO> getAllCourses(@RequestBody SessionID sessionID){
         List<CourseDTO> courseDTOS = new ArrayList<>();
 
-        String idIntermediar = sessionID.getSessionId().substring(1, sessionID.getSessionId().length()-1);
-        int id = Integer.parseInt(idIntermediar);
+        int id = sessionID.getSessionId();
         AppUser appUser = appUserService.findAppUserById(id).get();
 
         List<AllCourses> currentUserCourses = appUserService.findAllCoursesByCurrentUser(appUser);
@@ -79,8 +79,7 @@ public class UserDetailsController {
 
         AllCourses currentCourse = allCoursesService.findACourseByName(sessionID.getCourseName()).get();
 
-        String idIntermediat = sessionID.getSessionId().substring(1, sessionID.getSessionId().length()-1);
-        int id = Integer.parseInt(idIntermediat);
+        int id = sessionID.getSessionId();
         AppUser appUser = appUserService.findAppUserById(id).get();
 
         CourseDTO courseDTO = buildDTOs.makeCourseDetailsDTO(appUser,currentCourse);
@@ -93,8 +92,7 @@ public class UserDetailsController {
     @PostMapping(value = "/getSchedule")
     public List<ScheduleDTO> getSchedule(@RequestBody SessionID sessionID){
 
-        String idIntermediat = sessionID.getSessionId().substring(1, sessionID.getSessionId().length()-1);
-        int id = Integer.parseInt(idIntermediat);
+        int id = sessionID.getSessionId();
         AppUser appUser = appUserService.findAppUserById(id).get();
 
         return buildDTOs.buildScheduleDTO(appUser);
@@ -104,8 +102,7 @@ public class UserDetailsController {
 
     @PostMapping("/getStructAnUniv")
     public List<StructAnUnivDTO> getStructAn(@RequestBody SessionID sessionID){
-        String idIntermediat = sessionID.getSessionId().substring(1, sessionID.getSessionId().length()-1);
-        int id = Integer.parseInt(idIntermediat);
+        int id = sessionID.getSessionId();
         AppUser appUser = appUserService.findAppUserById(id).get();
 
         University university  = appUser.getUniversity();
@@ -130,16 +127,17 @@ public class UserDetailsController {
 
 
     @PostMapping("/addAssig")
-    public void addAssig(@RequestBody SessionID sessionID) throws ParseException {
-        String idIntermediat = sessionID.getSessionId().substring(1, sessionID.getSessionId().length()-1);
-        int id = Integer.parseInt(idIntermediat);
+    public int addAssig(@RequestBody SessionID sessionID) throws ParseException {
+        int id = sessionID.getSessionId();
         AppUser appUser = appUserService.findAppUserById(id).get();
 
         AllCourses currentCourse = allCoursesService.findACourseByName(sessionID.getCourseName()).get();
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
         Date assigDate = formatter.parse(sessionID.getAssigDeadline());
-        assigmentService.save(new Assigment(null,assigDate ,sessionID.getAssigTitle(), sessionID.getAssigDescription(),
-                AssigStatus.NOTCompleted, appUser, currentCourse));
+        return assigmentService.save(new Assigment(null,assigDate ,sessionID.getAssigTitle(), sessionID.getAssigDescription(),
+                AssigStatus.NOTCompleted, appUser, currentCourse)).getId();
+
+
 
     }
 

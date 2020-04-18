@@ -53,7 +53,6 @@ public class BuildDTOs {
 
             }
         }
-
         return scheduleDTOS;
 
     }

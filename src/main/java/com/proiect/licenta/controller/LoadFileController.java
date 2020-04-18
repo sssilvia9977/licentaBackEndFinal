@@ -26,8 +26,7 @@ public class LoadFileController {
 
     @PostMapping(value= "/sendSessionID")
     public void currentUserId(@RequestBody SessionID sessionID){
-        String idIntermediat = sessionID.getSessionId().substring(1, sessionID.getSessionId().length()-1);
-        int id = Integer.parseInt(idIntermediat);
+        int id = sessionID.getSessionId();
         if( appUserServices.findAppUserById(id).isPresent()){
             currentUser = appUserServices.findAppUserById(id).get();
         }

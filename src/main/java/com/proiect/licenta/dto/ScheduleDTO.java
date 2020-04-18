@@ -17,6 +17,4 @@ public class ScheduleDTO {
     private String courseName;
 
 
-
-
 }

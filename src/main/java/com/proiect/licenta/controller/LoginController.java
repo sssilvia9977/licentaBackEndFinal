@@ -26,7 +26,7 @@ public class LoginController {
         if(appUserServices.findUserByUsername(username).isPresent()){
             AppUser appUser = appUserServices.findUserByUsername(username).get();
             if(appUser.getPassword().equals(password)){
-                sessionId.setSessionId(appUser.getAppUserId().toString());
+                sessionId.setSessionId(appUser.getAppUserId());
             }
 
         }
