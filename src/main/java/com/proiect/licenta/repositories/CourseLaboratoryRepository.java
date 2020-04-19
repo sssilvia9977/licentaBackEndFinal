@@ -13,7 +13,6 @@ public interface CourseLaboratoryRepository extends Repository<CourseLaboratory,
     CourseLaboratory save(CourseLaboratory courseLaboratory);
     List<CourseLaboratory> findAll();
     Optional<CourseLaboratory> findById(int id);
-    Optional<CourseLaboratory> findByAllCourses_Id(int id);
     void delete(CourseLaboratory courseLaboratory);
 
 }

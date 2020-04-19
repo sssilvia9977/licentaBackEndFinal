@@ -28,8 +28,6 @@ public class CourseSeminaryService {
         repositoryFactory.createCourseSeminaryRepository().delete(courseSeminary);
     }
 
-    public Optional<CourseSeminary> findSeminaryForCourse(AllCourses allCourse){
-        return repositoryFactory.createCourseSeminaryRepository().findByAllCourses_Id(allCourse.getId());
-    }
+
 
 }

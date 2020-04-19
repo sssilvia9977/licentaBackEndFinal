@@ -1,6 +1,8 @@
 package com.proiect.licenta.dto;
 
 import com.proiect.licenta.entities.*;
+import com.proiect.licenta.entities.choices.CourseSmallScheduleType;
+import com.proiect.licenta.services.AllCoursesService;
 import com.proiect.licenta.services.AssigmentService;
 import com.proiect.licenta.services.ScheduleService;
 import lombok.AllArgsConstructor;
@@ -23,6 +25,7 @@ public class BuildDTOs {
 
     private final ScheduleService scheduleService;
     private final AssigmentService assigmentService;
+    private final AllCoursesService allCoursesService;
 
 
     public StructAnUnivDTO makeStructAnUnivDTO(StructuraAnUniversitar s){
@@ -49,8 +52,37 @@ public class BuildDTOs {
                 String courseType = scheduleService.findCourseNameAndTypeForSpecificSchedule(s).get(0);
                 String courseName = scheduleService.findCourseNameAndTypeForSpecificSchedule(s).get(1);
 
-                scheduleDTOS.add(new ScheduleDTO(day, hourStart, hourEnd, weekType, courseType, courseName));
+                String courseAbreviere = "";
+                String[] abreviere = courseName.split(" ");
+                for (String si: abreviere) {
+                    courseAbreviere += si.substring(0,1).toUpperCase();
+                }
 
+                AllCourses theCourse  = allCoursesService.findACourseByName(courseName).get();
+                String courseClassRoom = "";
+                String courseAddress = "";
+                String courseAddressDetails = "";
+                if(courseType.equals(CourseSmallScheduleType.LABORATORY)){
+                    CourseLaboratory theLAb = scheduleService.getUsersLaboratoryForSpecificCourse(appUser, theCourse).get();
+                    courseClassRoom = theLAb.getClassRoom().getClassRoomName();
+                    courseAddress =  theLAb.getClassRoom().getAddress();
+                    courseAddressDetails = theLAb.getClassRoom().getObservation();
+                }
+                if(courseType.equals(CourseSmallScheduleType.LECTURE)){
+                    CourseLecture theLec = scheduleService.getUsersLectureForSpecificCourse(appUser, theCourse).get();
+                    courseClassRoom = theLec.getClassRoom().getClassRoomName();
+                    courseAddress =  theLec.getClassRoom().getAddress();
+                    courseAddressDetails = theLec.getClassRoom().getObservation();
+                }
+                if(courseType.equals(CourseSmallScheduleType.SEMINARY)){
+                    CourseSeminary theSem = scheduleService.getUsersSeminaryForSpecificCourse(appUser, theCourse).get();
+                    courseClassRoom = theSem.getClassRoom().getClassRoomName();
+                    courseAddress =  theSem.getClassRoom().getAddress();
+                    courseAddressDetails = theSem.getClassRoom().getObservation();
+                }
+                
+                scheduleDTOS.add(new ScheduleDTO(day, hourStart, hourEnd, weekType, courseType, courseName, courseAbreviere,
+                        courseClassRoom, courseAddress, courseAddressDetails));
             }
         }
         return scheduleDTOS;

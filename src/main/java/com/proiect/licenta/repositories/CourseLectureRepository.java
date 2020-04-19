@@ -13,6 +13,5 @@ public interface CourseLectureRepository extends Repository<CourseLecture, Integ
     CourseLecture save(CourseLecture courseLecture);
     List<CourseLecture> findAll();
     Optional<CourseLecture> findById(int id);
-    Optional<CourseLecture> findByAllCourses_Id(int id);
     void delete(CourseLecture courseLecture);
 }

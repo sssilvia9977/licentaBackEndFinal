@@ -38,33 +38,6 @@ public class AllCoursesService {
         return repositoryFactory.createAllCoursesRepository().findByName(name);
     }
 
-    public Optional<Professor> findProfessorForLecture(AllCourses allCourses){
-        Professor professor;
-        if(courseLectureService.findLectureForCourse(allCourses).isPresent()){
-             professor = courseLectureService.findLectureForCourse(allCourses).get().getProfessor();
-            return Optional.ofNullable(professor);
-        }
-       return Optional.empty();
-    }
-
-    public Optional<Professor> findProfessorForLaboratory(AllCourses allCourses){
-        Professor professor;
-        if(courseLaboratoryService.findLaboratoryForCourse(allCourses).isPresent()){
-            professor = courseLaboratoryService.findLaboratoryForCourse(allCourses).get().getProfessor();
-            return Optional.ofNullable(professor);
-        }
-        return Optional.empty();
-    }
-
-    public Optional<Professor> findProfessorForSeminary(AllCourses allCourses){
-        Professor professor;
-        if(courseSeminaryService.findSeminaryForCourse(allCourses).isPresent()){
-            professor = courseSeminaryService.findSeminaryForCourse(allCourses).get().getProfessor();
-            return Optional.ofNullable(professor);
-        }
-        return Optional.empty();
-    }
-
 
 
 

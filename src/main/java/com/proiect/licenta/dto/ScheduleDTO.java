@@ -15,6 +15,11 @@ public class ScheduleDTO {
     private String weekType;
     private String courseType;
     private String courseName;
+    private String courseAbreviere;
+
+    private String courseClassRoom;
+    private String courseAddress;
+    private String courseAddressDetails;
 
 
 }

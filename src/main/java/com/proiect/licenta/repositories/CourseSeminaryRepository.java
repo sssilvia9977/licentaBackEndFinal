@@ -14,6 +14,5 @@ public interface CourseSeminaryRepository extends Repository<CourseSeminary, Int
     CourseSeminary save(CourseSeminary courseSeminary);
     List<CourseSeminary> findAll();
     Optional<CourseSeminary> findById(int id);
-    Optional<CourseSeminary> findByAllCourses_Id(int id);
     void delete(CourseSeminary courseSeminary);
 }

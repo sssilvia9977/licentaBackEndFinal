@@ -28,9 +28,7 @@ public class CourseLectureService {
         repositoryFactory.createCourseLectureRepository().delete(courseLecture);
     }
 
-    public Optional<CourseLecture> findLectureForCourse(AllCourses allCourse){
-        return repositoryFactory.createCourseLectureRepository().findByAllCourses_Id(allCourse.getId());
-    }
+
 
 
 }

@@ -28,9 +28,7 @@ public class CourseLaboratoryService {
         repositoryFactory.createCourseLaboratoryRepository().delete(courseLaboratory);
     }
 
-    public Optional<CourseLaboratory> findLaboratoryForCourse(AllCourses allCourse){
-        return repositoryFactory.createCourseLaboratoryRepository().findByAllCourses_Id(allCourse.getId());
-    }
+
 
 
 }
