@@ -169,5 +169,20 @@ public class UserDetailsController {
     }
 
 
+    @PostMapping("/getAllAssigs")
+    public List<AssigmentDTO>  getAllAssigs(@RequestBody SessionID sessionID){
+        int id = sessionID.getSessionId();
+        AppUser appUser = appUserService.findAppUserById(id).get();
+        List<Assigment> assigments = assigmentService.findAssigByUser(appUser);
+        List<AssigmentDTO> assigmentDTOS = new ArrayList<>();
+        for(Assigment a: assigments){
+            assigmentDTOS.add(buildDTOs.makeAssigDTO(a.getAllCourses(), a));
+        }
+        return assigmentDTOS;
+    }
+
+
+
+
 
 }
