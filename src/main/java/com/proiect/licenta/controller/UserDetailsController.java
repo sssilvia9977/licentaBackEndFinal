@@ -27,6 +27,9 @@ public class UserDetailsController {
     private final AssigmentService assigmentService;
     private final BuildDTOs buildDTOs;
 
+    //TODO: cand adaugi un user nou, universitatea gaseste o in functie de facultate, ca nu poti sa ai un user la facX,univZ
+    // facX sa nu aparatina la univZ
+
     @PostMapping(value = "/getUsername")
     public AppUserDTO returnUsername(@RequestBody SessionID sessionID){
 
@@ -174,11 +177,16 @@ public class UserDetailsController {
         int id = sessionID.getSessionId();
         AppUser appUser = appUserService.findAppUserById(id).get();
         List<Assigment> assigments = assigmentService.findAssigByUser(appUser);
-        List<AssigmentDTO> assigmentDTOS = new ArrayList<>();
-        for(Assigment a: assigments){
-            assigmentDTOS.add(buildDTOs.makeAssigDTO(a.getAllCourses(), a));
+        if(assigments.isEmpty())
+            return null;
+        else{
+            List<AssigmentDTO> assigmentDTOS = new ArrayList<>();
+            for(Assigment a: assigments){
+                assigmentDTOS.add(buildDTOs.makeAssigDTO(a.getAllCourses(), a));
+            }
+            return assigmentDTOS;
         }
-        return assigmentDTOS;
+
     }
 
 

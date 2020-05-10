@@ -39,16 +39,16 @@ public class Seed implements CommandLineRunner {
         facultyService.save(faculty2);
 
 
-        AppUser appUser = new AppUser(null, "Calin", "File de poveste", "print@ex.com", "a", "a", 3, university1, faculty2, null, null);
+        AppUser appUser = new AppUser(null, "Calin", "File de poveste", "print@ex.com", "a", "a", 3, university1, faculty2,null,null,null, null);
         appUserServices.save(appUser);
         Assigment assigmentForUser1 = new Assigment(null, null, "Learn threads", "Do your beste to learn threads",
                 AssigStatus.NOTCompleted, appUser, null);
         assigmentService.save(assigmentForUser1);
 
-        AppUser appUser2 = new AppUser(null, "Catalina", "Muritoare", "rudemari@ex.com", "fata", "parinti", 3, university1, faculty1, null, null);
+        AppUser appUser2 = new AppUser(null, "Catalina", "Muritoare", "rudemari@ex.com", "fata", "parinti", 3, university1, faculty1,null, null, null,null);
         appUserServices.save(appUser2);
 
-        AppUser appUser3 = new AppUser(null, "Luceafarul", "Nemuriorul", "rece@ex.com", "dorinta", "igata", 3, university1, faculty2, null, null);
+        AppUser appUser3 = new AppUser(null, "Luceafarul", "Nemuriorul", "rece@ex.com", "dorinta", "igata", 3, university1, faculty2, null,null,null, null);
         appUserServices.save(appUser3);
 
         List<AppUser> apps = appUserServices.findAllAppUsers();
@@ -59,8 +59,8 @@ public class Seed implements CommandLineRunner {
 
         List<Faculty> fac = facultyService.findAllFaculties();
         Optional<Faculty> f = facultyService.findFacultyById(1);
-*/
 
+*/
 
     }
 

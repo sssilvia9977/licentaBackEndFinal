@@ -14,5 +14,6 @@ public interface RepositoryFactory {
     CourseLectureRepository createCourseLectureRepository();
     CourseSeminaryRepository createCourseSeminaryRepository();
     ProfessorRepository createProfessorRepository();
+    RecommendationRepository createRecommendationRepository();
 
 }

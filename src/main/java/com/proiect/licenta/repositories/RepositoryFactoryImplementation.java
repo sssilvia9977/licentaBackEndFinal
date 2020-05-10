@@ -22,10 +22,16 @@ public class RepositoryFactoryImplementation implements RepositoryFactory {
     private final CourseLaboratoryRepository courseLaboratoryRepository;
     private final CourseSeminaryRepository courseSeminaryRepository;
     private final ProfessorRepository professorRepository;
+    private final RecommendationRepository recommendationRepository;
 
     @Override
     public AppUserRepository createAppUserRepository() {
         return appUserRepository;
+    }
+
+    @Override
+    public RecommendationRepository createRecommendationRepository() {
+        return recommendationRepository;
     }
 
     @Override

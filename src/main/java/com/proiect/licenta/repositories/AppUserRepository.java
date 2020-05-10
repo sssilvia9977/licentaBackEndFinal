@@ -1,6 +1,7 @@
 package com.proiect.licenta.repositories;
 
 import com.proiect.licenta.entities.AppUser;
+import com.proiect.licenta.entities.Recommendation;
 import com.proiect.licenta.entities.Schedule;
 import org.springframework.data.repository.Repository;
 

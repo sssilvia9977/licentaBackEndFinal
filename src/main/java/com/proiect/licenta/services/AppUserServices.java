@@ -34,6 +34,9 @@ public class AppUserServices {
         repositoryFactory.createAppUserRepository().delete(appUser);
     }
 
+
+
+
     public List<AllCourses> findAllCoursesByCurrentUser(AppUser appUser){
         List<AllCourses> userCourses = new ArrayList<>();
         List<AllCourses> allCoursesList = allCoursesService.findAllAllCourses();

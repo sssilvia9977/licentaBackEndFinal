@@ -38,6 +38,12 @@ public class AppUser {
     @OneToMany(mappedBy = "appUser", cascade = CascadeType.ALL)
     private List<Assigment> assignments;
 
+    @OneToMany(mappedBy = "appUser", cascade = CascadeType.ALL)
+    private List<Recommendation> recommendations;
+
+
+
+
 
     @Override
     public String toString() {
