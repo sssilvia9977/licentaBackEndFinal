@@ -16,7 +16,7 @@ public class Recommendation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer recId;
-    private String numeleLocal;
+    private String placeName;
     private String address;
     private String initialComment;
     private String category;
