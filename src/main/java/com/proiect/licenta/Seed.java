@@ -1,11 +1,10 @@
 package com.proiect.licenta;
 
-import com.proiect.licenta.entities.AppUser;
-import com.proiect.licenta.entities.Assigment;
-import com.proiect.licenta.entities.Faculty;
-import com.proiect.licenta.entities.University;
+import com.proiect.licenta.entities.*;
 import com.proiect.licenta.entities.choices.AssigStatus;
+import com.proiect.licenta.entities.choices.RecCategories;
 import com.proiect.licenta.services.*;
+import jdk.jfr.Category;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -25,6 +24,7 @@ public class Seed implements CommandLineRunner {
     private final UniversityService universityService;
     private final AssigmentService assigmentService;
     private final ClassRoomService classRoomService;
+    private final RecommendationService recommendationService;
 
     @Override
     public void run(String... args) {
@@ -39,17 +39,33 @@ public class Seed implements CommandLineRunner {
         facultyService.save(faculty2);
 
 
-        AppUser appUser = new AppUser(null, "Calin", "File de poveste", "print@ex.com", "a", "a", 3, university1, faculty2,null,null,null, null);
+        AppUser appUser = new AppUser(null, "Calin", "File de poveste", "print@ex.com", "a", "a", 3, university1, faculty2,null,null,null);
         appUserServices.save(appUser);
         Assigment assigmentForUser1 = new Assigment(null, null, "Learn threads", "Do your beste to learn threads",
                 AssigStatus.NOTCompleted, appUser, null);
-        assigmentService.save(assigmentForUser1);
+       // assigmentService.save(assigmentForUser1);
 
-        AppUser appUser2 = new AppUser(null, "Catalina", "Muritoare", "rudemari@ex.com", "fata", "parinti", 3, university1, faculty1,null, null, null,null);
+        AppUser appUser2 = new AppUser(null, "Catalina", "Muritoare", "rudemari@ex.com", "fata", "parinti", 3, university1, faculty1,null, null, null);
         appUserServices.save(appUser2);
 
-        AppUser appUser3 = new AppUser(null, "Luceafarul", "Nemuriorul", "rece@ex.com", "dorinta", "igata", 3, university1, faculty2, null,null,null, null);
+        AppUser appUser3 = new AppUser(null, "Luceafarul", "Nemuriorul", "rece@ex.com", "dorinta", "igata", 3, university1, faculty2, null,null,null);
         appUserServices.save(appUser3);
+
+        Recommendation r1 = new Recommendation(null, "DownTown 25", "Cluj-Napoca str. Dorobantilor 39", "Mi a placut tare", RecCategories.SPLURGE, appUser);
+        recommendationService.save(r1);
+
+        Recommendation r2 = new Recommendation(null, "DownTown 25", "Cluj-Napoca str. Lunii 10", "Mi a placut tare", RecCategories.SPLURGE, appUser);
+        recommendationService.save(r2);
+
+        Recommendation r3 = new Recommendation(null, "DownTown 25", "Cluj-Napoca str. Observator 32", "Mi a placut tare", RecCategories.RESTAURANT, appUser2);
+        recommendationService.save(r3);
+
+        Recommendation r4 = new Recommendation(null, "DownTown 25", "Cluj-Napoca str. Rapsodiei", "Mi a placut tare", RecCategories.COFFEE_TOGO, appUser2);
+        recommendationService.save(r4);
+
+        Recommendation r5 = new Recommendation(null, "DownTown 25", "Cluj-Napoca str. Primaverii", "Mi a placut tare", RecCategories.SPLURGE, appUser2);
+        recommendationService.save(r5);
+
 
         List<AppUser> apps = appUserServices.findAllAppUsers();
         Optional<AppUser> a = appUserServices.findAppUserById(2);

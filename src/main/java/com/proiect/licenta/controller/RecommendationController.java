@@ -1,12 +1,14 @@
 package com.proiect.licenta.controller;
 
 
+import com.proiect.licenta.dto.RecDTO;
 import com.proiect.licenta.entities.AppUser;
 import com.proiect.licenta.entities.Recommendation;
 import com.proiect.licenta.entities.choices.RecCategories;
 import com.proiect.licenta.services.AppUserServices;
 import com.proiect.licenta.services.RecommendationService;
 import com.proiect.licenta.services.SessionID;
+import jdk.jfr.Category;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin
@@ -23,16 +26,36 @@ public class RecommendationController {
     private final RecommendationService recommendationService;
     private final AppUserServices appUserServices;
 
+    @PostMapping(value = "/checkUniq")
+    public boolean checkUniq(@RequestBody SessionID sessionID){
+        boolean result = true;
+        String[] newAddress = sessionID.getAddress().toUpperCase().replace(",.-", "").split(" ");
+        List<Recommendation> recommendations = recommendationService.findAllRecommendation();
+        for(Recommendation r: recommendations){
+            String addressToCheck = r.getAddress().toUpperCase();
+            int addressToCheckWords = addressToCheck.split(" ").length;
+            int contor = 0;
+            for(String s: newAddress){
+                if(addressToCheck.contains(s)){
+                    contor++;
+                }
+            }
+            if(contor == addressToCheckWords){
+                result = false;
+            }
+        }
+        return result;
+    }
 
-    @PostMapping(value = "/getAllRec")
-    public List<Recommendation> getAllRec(){
-        return recommendationService.findAllRecommendation();
+    @GetMapping(value = "/getAllRec")
+    public List<RecDTO> getAllRec(){
+        return  recommendationService.findAllRecommendation().stream().map(RecDTO::new).collect(Collectors.toList());
     }
 
     @PostMapping(value = "/getRecPostedByUser")
-    public List<Recommendation> getRecPostedByUser(@RequestBody SessionID sessionID){
+    public List<RecDTO> getRecPostedByUser(@RequestBody SessionID sessionID){
         AppUser appUser = appUserServices.findAppUserById(sessionID.getSessionId()).get();
-        return recommendationService.findAllRecommendationsByUser(appUser);
+        return recommendationService.findAllRecommendationsByUser(appUser).stream().map(RecDTO::new).collect(Collectors.toList());
     }
 
     @PostMapping(value = "/addRec")
@@ -43,12 +66,12 @@ public class RecommendationController {
     }
 
     @DeleteMapping(value = "/deleteRec")
-    public void deleteRec(@RequestBody SessionID sessionID){
+    public void deleteRec(@RequestBody SessionID sessionID){ ;
         recommendationService.deleteRecommendation(recommendationService.findRecommendationById(sessionID.getRecId()).get());
     }
 
-    @PostMapping(value = "/getAllCategories")
-    public List<String> getRecEAT_CHEAP(){
+    @GetMapping(value = "/getAllCategories")
+    public List<String> getAllCategories(){
         List<String> categ = new ArrayList<>();
         categ.add(RecCategories.SPLURGE);
         categ.add(RecCategories.COFFEE_STUDY);
@@ -61,40 +84,43 @@ public class RecommendationController {
         return categ;
     }
 
-    @PostMapping(value = "/getRecEAT_CHEAP")
-    public List<Recommendation> getRecEAT_CHEAP(SessionID sessionID){
-        return recommendationService.findAllRecommendationByCategory(sessionID.getCategory());
+    @GetMapping(value = "/getRecEAT_CHEAP")
+    public List<RecDTO> getRecEAT_CHEAP(){
+        return recommendationService.findAllRecommendationByCategory(RecCategories.EAT_CHEAP).stream().map(RecDTO::new).collect(Collectors.toList());
     }
 
-    @PostMapping(value = "/getRecDISCO")
-    public List<Recommendation> getRecDISCO(SessionID sessionID){
-        return recommendationService.findAllRecommendationByCategory(sessionID.getCategory());
+    @GetMapping(value = "/getRecDISCO")
+    public List<RecDTO> getRecDISCO(){
+        return recommendationService.findAllRecommendationByCategory(RecCategories.DISCO).stream().map(RecDTO::new).collect(Collectors.toList());
     }
 
-    @PostMapping(value = "/getRecCONCERT")
-    public List<Recommendation> getRecCONCERT(SessionID sessionID){
-        return recommendationService.findAllRecommendationByCategory(sessionID.getCategory());
+    @GetMapping(value = "/getRecCONCERT")
+    public List<RecDTO> getRecCONCERT(){
+        return recommendationService.findAllRecommendationByCategory(RecCategories.CONCERT).stream().map(RecDTO::new).collect(Collectors.toList());
     }
 
-    @PostMapping(value = "/getRecSPLURGE")
-    public List<Recommendation> getRecSPLURGE(SessionID sessionID){
-        return recommendationService.findAllRecommendationByCategory(sessionID.getCategory());
+
+    @GetMapping(value = "/getRecCOFFEE_STUDY")
+    public List<RecDTO> getRecCOFFEE_STUDY(){
+        return recommendationService.findAllRecommendationByCategory(RecCategories.COFFEE_STUDY).stream().map(RecDTO::new).collect(Collectors.toList());
     }
 
-    @PostMapping(value = "/getRecCOFFEE_STUDY")
-    public List<Recommendation> getRecCOFFEE_STUDY(SessionID sessionID){
-        return recommendationService.findAllRecommendationByCategory(sessionID.getCategory());
+    @GetMapping(value = "/getRecCOFFEE_TOGO")
+    public List<RecDTO> getRecCOFFEE_TOGO(){
+        return recommendationService.findAllRecommendationByCategory(RecCategories.COFFEE_TOGO).stream().map(RecDTO::new).collect(Collectors.toList());
     }
 
-    @PostMapping(value = "/getRecCOFFEE_TOGO")
-    public List<Recommendation> getRecCOFFEE_TOGO(SessionID sessionID){
-        return recommendationService.findAllRecommendationByCategory(sessionID.getCategory());
+    @GetMapping(value = "/getRecRESTAURANT")
+    public List<RecDTO> getRecRESTAURANT(){
+        return recommendationService.findAllRecommendationByCategory(RecCategories.RESTAURANT).stream().map(RecDTO::new).collect(Collectors.toList());
     }
 
-    @PostMapping(value = "/getRecRESTAURANT")
-    public List<Recommendation> getRecRESTAURANT(SessionID sessionID){
-        return recommendationService.findAllRecommendationByCategory(sessionID.getCategory());
+
+    @GetMapping(value = "/getRecSPLURGE")
+    public List<RecDTO> getRecSPLURGE(  ){
+        return recommendationService.findAllRecommendationByCategory(RecCategories.SPLURGE).stream().map(RecDTO::new).collect(Collectors.toList());
     }
+
 
 
 }

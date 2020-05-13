@@ -161,8 +161,6 @@ public class BuildDTOs {
                 professorLabString, professorLabEmail, classRoomLabString, addressLab, obsLab,
                 professorSemString, professorSemEmail, classRoomSemString, addressSemi, obsSem,
                 assigmentDTOS);
-
-
     }
 
 

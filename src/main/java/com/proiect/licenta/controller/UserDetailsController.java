@@ -26,6 +26,7 @@ public class UserDetailsController {
     private final StructuraAnUniverService structuraAnUniverService;
     private final AssigmentService assigmentService;
     private final BuildDTOs buildDTOs;
+    private final RecommendationService recommendationService;
 
     //TODO: cand adaugi un user nou, universitatea gaseste o in functie de facultate, ca nu poti sa ai un user la facX,univZ
     // facX sa nu aparatina la univZ
@@ -188,7 +189,6 @@ public class UserDetailsController {
         }
 
     }
-
 
 
 
