@@ -15,6 +15,9 @@ public class SessionID {
     private int sessionId;
     private String username;
     private String password;
+    private String email;
+    private String faculty;
+    private String uni;
 
     private String courseName;
 

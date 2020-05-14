@@ -28,4 +28,9 @@ public class UniversityService {
         repositoryFactory.createUniversityRepository().delete(university);
     }
 
+    public Optional<University> findUniversityByName(String id){
+        return repositoryFactory.createUniversityRepository().findByFullName(id);
+    }
+
+
 }

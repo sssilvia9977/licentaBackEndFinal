@@ -30,5 +30,7 @@ public class FacultyService {
         repositoryFactory.createFacultyRepository().delete(faculty);
     }
 
-
+    public Optional<Faculty> findFacultyName(String name){
+        return repositoryFactory.createFacultyRepository().findFacultyByFullName(name);
+    }
 }

@@ -29,7 +29,7 @@ public class Seed implements CommandLineRunner {
     @Override
     public void run(String... args) {
 /*
-        University university1 = new University("Universitatea Tehnica din Cluj-Napoca", "UTCN");
+       University university1 = new University("Universitatea Tehnica din Cluj-Napoca", "UTCN");
         universityService.save(university1);
 
         Faculty faculty1 = new Faculty(university1, "Facultatea de automatica si calculatoare", "AC");
@@ -39,7 +39,7 @@ public class Seed implements CommandLineRunner {
         facultyService.save(faculty2);
 
 
-        AppUser appUser = new AppUser(null, "Calin", "File de poveste", "print@ex.com", "a", "a", 3, university1, faculty2,null,null,null);
+        AppUser appUser = new AppUser(null, "Calin", "File de poveste", "print@ex.com", "Silvia", "a", 3, university1, faculty2,null,null,null);
         appUserServices.save(appUser);
         Assigment assigmentForUser1 = new Assigment(null, null, "Learn threads", "Do your beste to learn threads",
                 AssigStatus.NOTCompleted, appUser, null);
@@ -51,20 +51,18 @@ public class Seed implements CommandLineRunner {
         AppUser appUser3 = new AppUser(null, "Luceafarul", "Nemuriorul", "rece@ex.com", "dorinta", "igata", 3, university1, faculty2, null,null,null);
         appUserServices.save(appUser3);
 
-        Recommendation r1 = new Recommendation(null, "DownTown 25", "Cluj-Napoca str. Dorobantilor 39", "Mi a placut tare", RecCategories.SPLURGE, appUser);
+        Recommendation r1 = new Recommendation(null, "DownTown 25", "DownTown 25, Piața Unirii 4-5, Cluj-Napoca 400000", "Mi a placut tare", RecCategories.SPLURGE, appUser);
         recommendationService.save(r1);
 
-        Recommendation r2 = new Recommendation(null, "DownTown 25", "Cluj-Napoca str. Lunii 10", "Mi a placut tare", RecCategories.SPLURGE, appUser);
+        Recommendation r2 = new Recommendation(null, "The Soviet", "The Soviet, Strada Franklin Delano Roosevelt, Cluj-Napoca 400000", "Mi a placut tare", RecCategories.COFFEE_TOGO, appUser);
         recommendationService.save(r2);
 
-        Recommendation r3 = new Recommendation(null, "DownTown 25", "Cluj-Napoca str. Observator 32", "Mi a placut tare", RecCategories.RESTAURANT, appUser2);
+        Recommendation r3 = new Recommendation(null, "/Form Cafe", "/Form Cafe, Piața Unirii 25, Cluj-Napoca 400000", "Mi a placut tare", RecCategories.RESTAURANT, appUser2);
         recommendationService.save(r3);
 
-        Recommendation r4 = new Recommendation(null, "DownTown 25", "Cluj-Napoca str. Rapsodiei", "Mi a placut tare", RecCategories.COFFEE_TOGO, appUser2);
+        Recommendation r4 = new Recommendation(null, "Captain Bean", "22-26 Strada Regele Ferdinand Centru Cluj-Napoca Municipiul Cluj - Napoca Județul, Cluj-Napoca 400000", "Mi a placut tare", RecCategories.COFFEE_TOGO, appUser2);
         recommendationService.save(r4);
 
-        Recommendation r5 = new Recommendation(null, "DownTown 25", "Cluj-Napoca str. Primaverii", "Mi a placut tare", RecCategories.SPLURGE, appUser2);
-        recommendationService.save(r5);
 
 
         List<AppUser> apps = appUserServices.findAllAppUsers();

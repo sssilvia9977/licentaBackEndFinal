@@ -11,6 +11,7 @@ public interface UniversityRepository extends Repository<University, Integer> {
     University save(University university);
     List<University> findAll();
     Optional<University> findByUniId(int id);
+    Optional<University> findByFullName(String name);
     void delete(University university);
 
 

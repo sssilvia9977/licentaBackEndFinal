@@ -13,6 +13,7 @@ public interface FacultyRepository extends Repository<Faculty, Integer> {
     List<Faculty> findAll();
     Optional<Faculty> findByFacultyId(int id);
     void delete(Faculty faculty);
+    Optional<Faculty> findFacultyByFullName(String name);
 
 
 

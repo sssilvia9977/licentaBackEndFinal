@@ -209,4 +209,13 @@ public class BuildDTOs {
         return result;
     }
 
+
+    public String abreviere(String a){
+        String[] abreviere = a.split(" ");
+        String abreviereFinal = "";
+        for (String s: abreviere) {
+            abreviereFinal += s.substring(0,1).toUpperCase();
+        }
+        return abreviereFinal;
+    }
 }

@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -34,6 +36,9 @@ public class AppUserServices {
         repositoryFactory.createAppUserRepository().delete(appUser);
     }
 
+    public boolean checkUniqueUsername(String username){
+        return findAllAppUsers().stream().noneMatch(e -> e.getUsername().equals(username));
+    }
 
 
 
