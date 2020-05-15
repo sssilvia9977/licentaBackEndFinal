@@ -23,13 +23,13 @@ public class StructuraAnUniversitar {
     private String schoolPeriodType;
 
     @OneToOne
-    private University university;
+    private AppUser appUser;
 
-    public StructuraAnUniversitar(Date periodStart, Date periodEnd, String schoolPeriodType, University university){
+    public StructuraAnUniversitar(Date periodStart, Date periodEnd, String schoolPeriodType, AppUser appUser){
         this.periodStart = periodStart;
         this.periodEnd = periodEnd;
         this.schoolPeriodType = schoolPeriodType;
-        this.university = university;
+        this.appUser = appUser;
     }
 
 

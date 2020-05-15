@@ -2,16 +2,12 @@ package com.proiect.licenta.services;
 
 import com.proiect.licenta.entities.AllCourses;
 import com.proiect.licenta.entities.AppUser;
-import com.proiect.licenta.entities.Faculty;
 import com.proiect.licenta.repositories.RepositoryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -43,14 +39,8 @@ public class AppUserServices {
 
 
     public List<AllCourses> findAllCoursesByCurrentUser(AppUser appUser){
-        List<AllCourses> userCourses = new ArrayList<>();
-        List<AllCourses> allCoursesList = allCoursesService.findAllAllCourses();
-        Faculty currentUserFaculty = appUser.getFaculty();
-        for (AllCourses a: allCoursesList) {
-            if(a.getFaculty() == currentUserFaculty)
-                userCourses.add(a);
-        }
-        return userCourses;
+        List<AllCourses> allCoursesList = allCoursesService.findAllAllCoursesByUser(appUser);
+        return allCoursesList;
     }
 
 

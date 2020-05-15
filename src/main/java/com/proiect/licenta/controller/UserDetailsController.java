@@ -3,11 +3,8 @@ package com.proiect.licenta.controller;
 import com.proiect.licenta.dto.*;
 import com.proiect.licenta.entities.*;
 import com.proiect.licenta.entities.choices.AssigStatus;
-import com.proiect.licenta.entities.choices.DaysOfWeek;
 import com.proiect.licenta.services.*;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.apache.naming.factory.SendMailFactory;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
@@ -16,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.logging.SimpleFormatter;
+import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin
@@ -29,8 +26,7 @@ public class UserDetailsController {
     private final AssigmentService assigmentService;
     private final BuildDTOs buildDTOs;
     private final RecommendationService recommendationService;
-    private final FacultyService facultyService;
-    private final UniversityService universityService;
+    private final ExamService examService;
 
 
     //TODO: cand adaugi un user nou, universitatea gaseste o in functie de facultate, ca nu poti sa ai un user la facX,univZ
@@ -87,50 +83,24 @@ public class UserDetailsController {
             }
         }
         if (Optional.ofNullable(sessionID.getFaculty()).isPresent() ) {
-            if (facultyService.findAllFaculties().stream().noneMatch(e -> e.getFullName().equals(sessionID.getFaculty()))) {
-                Faculty faculty = new Faculty(null, null, null, null, sessionID.getFaculty(), buildDTOs.abreviere(sessionID.getFaculty()), null);
-                facultyService.save(faculty);
-                appUser.setFaculty(faculty);
+                appUser.setFaculty(sessionID.getFaculty());
                 appUserService.save(appUser);
-            } else {
-                Faculty faculty = facultyService.findFacultyName(sessionID.getFaculty()).get();
-                appUser.setFaculty(faculty);
-                appUserService.save(appUser);
-            }
+        }
+        if (Optional.ofNullable(sessionID.getFname()).isPresent() ) {
+            appUser.setFirstName(sessionID.getFname());
+            appUserService.save(appUser);
+        }
+        if (Optional.ofNullable(sessionID.getLname()).isPresent() ) {
+            appUser.setLastName(sessionID.getLname());
+            appUserService.save(appUser);
         }
         if ( Optional.ofNullable(sessionID.getUni()).isPresent()) {
-            if (universityService.findAllUniversities().stream().noneMatch(e -> e.getFullName().equals(sessionID.getUni()))) {
-                University university = new University(null, sessionID.getUni(), buildDTOs.abreviere(sessionID.getUni()),null, null);
-                universityService.save(university);
-                appUser.setUniversity(university);
+                appUser.setUniversity(sessionID.getUni());
                 appUserService.save(appUser);
-            } else {
-                University university = universityService.findUniversityByName(sessionID.getUni()).get();
-                appUser.setUniversity(university);
-                appUserService.save(appUser);
-            }
         }
         return status;
     }
 
-
-    @GetMapping(value = "getAllUnis")
-    public List<String> getAllUnis() {
-        List<String> unis = new ArrayList<>();
-        universityService.findAllUniversities().forEach(e -> {
-            unis.add(e.getFullName());
-        });
-        return unis;
-    }
-
-    @GetMapping(value = "getAllFaculties")
-    public List<String> getAllFaculties() {
-        List<String> fac = new ArrayList<>();
-        facultyService.findAllFaculties().forEach(e -> {
-            fac.add(e.getFullName());
-        });
-        return fac;
-    }
 
     @PostMapping(value = "/getCourses")
     public List<CourseDTO> getAllCourses(@RequestBody SessionID sessionID) {
@@ -188,8 +158,7 @@ public class UserDetailsController {
         int id = sessionID.getSessionId();
         AppUser appUser = appUserService.findAppUserById(id).get();
 
-        University university = appUser.getUniversity();
-        List<StructuraAnUniversitar> structuraAnUniversitars = structuraAnUniverService.findStructuraByUniversity(university);
+        List<StructuraAnUniversitar> structuraAnUniversitars = structuraAnUniverService.findStructuraByAppUser(appUser);
         List<StructAnUnivDTO> structAnUnivDTOS = new ArrayList<>();
         for (StructuraAnUniversitar s : structuraAnUniversitars) {
             structAnUnivDTOS.add(buildDTOs.makeStructAnUnivDTO(s));
@@ -267,6 +236,34 @@ public class UserDetailsController {
         }
 
     }
+
+
+    @PostMapping("/getExams")
+    public List<ExamDTO> getExam(@RequestBody SessionID sessionID){
+        AppUser appUser = appUserService.findAppUserById(sessionID.getSessionId()).get();
+        return examService.findAssigByUser(appUser).stream().map(ExamDTO::new).collect(Collectors.toList());
+    }
+
+    @PostMapping("/addExam")
+    public void addExam(@RequestBody SessionID sessionID) throws ParseException {
+        AppUser appUser = appUserService.findAppUserById(sessionID.getSessionId()).get();
+
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+        Date examDate = formatter.parse(sessionID.getExamDate());
+
+        Exam e = new Exam(null, examDate, sessionID.getExamDetails(), allCoursesService.findACourseByName(sessionID.getCourseName()).get(), appUser);
+        examService.save(e);
+    }
+
+    @DeleteMapping("/deleteExam")
+    public void deleteExam(@RequestBody SessionID sessionID) {
+        Exam exam = examService.findExamById(sessionID.getExamId()).get();
+        examService.deleteExam(exam);
+    }
+
+
+
+
 
 
 }

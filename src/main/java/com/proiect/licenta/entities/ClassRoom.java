@@ -23,8 +23,6 @@ public class ClassRoom {
     private String address;
     private String observation;
 
-    @ManyToOne
-    private Faculty faculty;
 
     @OneToMany(mappedBy = "classRoom", cascade = CascadeType.ALL)
     private List<CourseLecture> courseLectures;
@@ -35,17 +33,15 @@ public class ClassRoom {
     @OneToMany(mappedBy = "classRoom", cascade = CascadeType.ALL)
     private List<CourseSeminary> courseSeminaries;
 
-    public ClassRoom(String classRoomName, String address, String observation, Faculty faculty ){
+    public ClassRoom(String classRoomName, String address, String observation){
         this.classRoomName = classRoomName;
         this.address = address;
         this.observation = observation;
-        this.faculty = faculty;
     }
 
-    public ClassRoom(String classRoomName, String address, Faculty faculty){
+    public ClassRoom(String classRoomName, String address){
         this.classRoomName = classRoomName;
         this.address = address;
-        this.faculty = faculty;
     }
 
 

@@ -2,7 +2,6 @@ package com.proiect.licenta.services;
 
 import com.proiect.licenta.entities.AppUser;
 import com.proiect.licenta.entities.ClassRoom;
-import com.proiect.licenta.entities.Faculty;
 import com.proiect.licenta.repositories.RepositoryFactory;
 import lombok.RequiredArgsConstructor;
 import org.apache.poi.ss.usermodel.Cell;
@@ -19,7 +18,7 @@ import java.util.Optional;
 public class ClassRoomService {
 
     private final RepositoryFactory repositoryFactory;
-    private final FacultyService facultyService;
+
 
     public ClassRoom save(ClassRoom classRoom){
         return repositoryFactory.createClassRoomRepository().save(classRoom);
@@ -39,7 +38,7 @@ public class ClassRoomService {
     }
 
     public void saveFromExcel(XSSFSheet sheet, AppUser currentUser){
-        System.out.println(facultyService.findFacultyById(currentUser.getFaculty().getFacultyId()).get().toString());
+
         Iterator<Row> rowIterator = sheet.iterator();
         rowIterator.next(); // skip the header row
         while (rowIterator.hasNext()) {
@@ -51,11 +50,9 @@ public class ClassRoomService {
             Cell address = cellIterator.next();
             if (cellIterator.hasNext()) {
                 Cell observations = cellIterator.next();
-                classRoom = new ClassRoom(classRoomName.toString(), address.toString(), observations.toString(),
-                        facultyService.findFacultyById(currentUser.getFaculty().getFacultyId()).get());
+                classRoom = new ClassRoom(classRoomName.toString(), address.toString(), observations.toString());
             } else {
-                classRoom = new ClassRoom(classRoomName.toString(), address.toString(),
-                        facultyService.findFacultyById(currentUser.getFaculty().getFacultyId()).get());
+                classRoom = new ClassRoom(classRoomName.toString(), address.toString());
             }
             save(classRoom);
         }

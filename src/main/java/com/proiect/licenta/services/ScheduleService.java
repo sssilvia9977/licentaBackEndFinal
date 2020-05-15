@@ -21,7 +21,6 @@ public class ScheduleService {
 
     private final RepositoryFactory repositoryFactory;
 
-    private final FacultyService facultyService;
     private final AllCoursesService allCoursesService;
     private final ProfessorService professorService;
     private final ClassRoomService classRoomService;
@@ -153,7 +152,7 @@ public class ScheduleService {
                      */
                 AllCourses aCourses;
                 if (allCoursesService.findACourseByName(courseNameString).isEmpty()) {
-                    aCourses = new AllCourses(courseNameString, currentUser.getFaculty());
+                    aCourses = new AllCourses(courseNameString, currentUser);
                     allCoursesService.save(aCourses);
                 } else
                     aCourses = allCoursesService.findACourseByName(courseNameString).get();

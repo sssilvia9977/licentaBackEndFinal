@@ -2,9 +2,7 @@ package com.proiect.licenta.services;
 
 
 import com.proiect.licenta.entities.AppUser;
-import com.proiect.licenta.entities.Faculty;
 import com.proiect.licenta.entities.StructuraAnUniversitar;
-import com.proiect.licenta.entities.University;
 import com.proiect.licenta.entities.choices.SchoolPeriodType;
 import com.proiect.licenta.repositories.RepositoryFactory;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +21,6 @@ import java.util.Optional;
 public class StructuraAnUniverService {
 
     private final RepositoryFactory repositoryFactory;
-    private final UniversityService universityService;
 
     public StructuraAnUniversitar save(StructuraAnUniversitar structuraAnUniversitar){
         return repositoryFactory.createStructuraAnUniversitarRepository().save(structuraAnUniversitar);
@@ -38,8 +35,8 @@ public class StructuraAnUniverService {
         repositoryFactory.createStructuraAnUniversitarRepository().delete(structuraAnUniversitar);
     }
 
-    public List<StructuraAnUniversitar> findStructuraByUniversity(University university){
-       return repositoryFactory.createStructuraAnUniversitarRepository().findAllByUniversity(university);
+    public List<StructuraAnUniversitar> findStructuraByAppUser(AppUser appUser){
+       return repositoryFactory.createStructuraAnUniversitarRepository().findByAppUser(appUser);
     }
 
 
@@ -70,7 +67,7 @@ public class StructuraAnUniverService {
             else periodTypeString = SchoolPeriodType.SCHOOL;
 
             structuraAnUniversitar = new StructuraAnUniversitar(periodStart, periodEnd, periodTypeString ,
-                    currentUSer.getUniversity());
+                    currentUSer);
             save(structuraAnUniversitar);
         }
 

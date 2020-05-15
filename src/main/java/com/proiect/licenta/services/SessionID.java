@@ -18,6 +18,8 @@ public class SessionID {
     private String email;
     private String faculty;
     private String uni;
+    private String fname;
+    private String lname;
 
     private String courseName;
 
@@ -34,6 +36,11 @@ public class SessionID {
     private String address;
     private String initialComment;
     private String category;
+
+    private int examId;
+    private String examDate;
+    private String examDetails;
+    private String course;
 
 
 

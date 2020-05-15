@@ -24,13 +24,12 @@ public class AppUser {
     private String password;
     private int yearOfStudy;
 
-    @ManyToOne
-    @JoinColumn
-    private University university;
+    private String university;
+    private String faculty;
 
-    @ManyToOne
-    @JoinColumn
-    private Faculty faculty;
+    @OneToMany(mappedBy = "appUser")
+    private List<AllCourses> allCourses;
+
 
     @OneToMany(mappedBy = "appUser", cascade = CascadeType.ALL)
     private List<Schedule> schedule;
@@ -41,6 +40,8 @@ public class AppUser {
     @OneToMany(mappedBy = "appUser", cascade = CascadeType.ALL)
     private List<Recommendation> recommendations;
 
+    @OneToMany(mappedBy = "appUser", cascade = CascadeType.ALL)
+    private List<Exam> exams;
 
 
 

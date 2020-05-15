@@ -11,8 +11,6 @@ import org.springframework.stereotype.Repository;
 public class RepositoryFactoryImplementation implements RepositoryFactory {
 
     private final AppUserRepository appUserRepository;
-    private final FacultyRepository facultyRepository;
-    private final UniversityRepository universityRepository;
     private final ClassRoomRepository classRoomRepository;
     private final StructuraAnUniversitarRepository structuraAnUniversitarRepository;
     private final ScheduleRepository scheduleRepository;
@@ -23,6 +21,7 @@ public class RepositoryFactoryImplementation implements RepositoryFactory {
     private final CourseSeminaryRepository courseSeminaryRepository;
     private final ProfessorRepository professorRepository;
     private final RecommendationRepository recommendationRepository;
+    private final ExamRepository examRepository;
 
     @Override
     public AppUserRepository createAppUserRepository() {
@@ -35,13 +34,8 @@ public class RepositoryFactoryImplementation implements RepositoryFactory {
     }
 
     @Override
-    public FacultyRepository createFacultyRepository() {
-        return facultyRepository;
-    }
-
-    @Override
-    public UniversityRepository createUniversityRepository() {
-        return universityRepository;
+    public ExamRepository createExamRepository() {
+        return examRepository;
     }
 
     @Override

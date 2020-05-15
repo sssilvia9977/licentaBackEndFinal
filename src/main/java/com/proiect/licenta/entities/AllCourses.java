@@ -22,7 +22,7 @@ public class AllCourses {
     private String name;
 
     @ManyToOne
-    private Faculty faculty;
+    private AppUser appUser;
 
     @OneToMany(mappedBy = "allCourses", cascade = CascadeType.ALL)
     private List<CourseLecture> courseLectures;
@@ -36,10 +36,13 @@ public class AllCourses {
     @OneToMany(mappedBy = "allCourses", cascade = CascadeType.ALL)
     private List<Assigment> assigment;
 
+    @OneToMany(mappedBy = "allCourses", cascade = CascadeType.ALL)
+    private List<Exam> exams ;
 
-    public AllCourses(String name, Faculty faculty){
+
+    public AllCourses(String name, AppUser appUser){
         this.name = name;
-        this.faculty  = faculty;
+        this.appUser  = appUser;
     }
 
     public String toString(){
