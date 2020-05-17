@@ -15,7 +15,7 @@ public interface ExamRepository extends Repository<Exam, Integer> {
     Optional<Exam> findById(int id);
     List<Exam> findByAppUser(AppUser appUser);
     void delete(Exam exam);
-    List<Exam> findByAllCoursesAndAppUser(AllCourses allCourses, AppUser appUser);
+    Optional<Exam> findByAllCoursesAndAppUser(AllCourses allCourses, AppUser appUser);
 
 
 }

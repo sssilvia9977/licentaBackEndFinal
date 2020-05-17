@@ -3,8 +3,9 @@ package com.proiect.licenta.dto;
 import com.proiect.licenta.entities.AllCourses;
 import com.proiect.licenta.entities.AppUser;
 import com.proiect.licenta.entities.Exam;
+import lombok.Data;
 
-
+@Data
 public class ExamDTO {
 
     private int id;

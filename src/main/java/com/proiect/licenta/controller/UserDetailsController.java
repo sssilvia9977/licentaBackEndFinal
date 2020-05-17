@@ -53,6 +53,22 @@ public class UserDetailsController {
         return appUserDTO;
     }
 
+
+    @PostMapping(value ="/addUser")
+    public String addUser(@RequestBody SessionID sessionID){
+        String status="ok";
+        if (!appUserService.checkUniqueUsername(sessionID.getUsername())){
+            status = "Username must be unique";
+            return status;
+        }
+
+        AppUser appUser = new AppUser(null, sessionID.getFname(), sessionID.getLname(), sessionID.getEmail(), sessionID.getUsername(), sessionID.getPassword(), 0, sessionID.getUni(), sessionID.getFaculty(),
+                null, null, null, null, null);
+        appUserService.save(appUser);
+        return status;
+    }
+
+
     @PostMapping(value = "/updateUser")
     public String updateUser(@RequestBody SessionID sessionID) {
         AppUser appUser = appUserService.findAppUserById(sessionID.getSessionId()).get();
@@ -234,26 +250,46 @@ public class UserDetailsController {
             }
             return assigmentDTOS;
         }
-
     }
 
 
-    @PostMapping("/getExams")
+    @PostMapping("/getExam")
     public List<ExamDTO> getExam(@RequestBody SessionID sessionID){
         AppUser appUser = appUserService.findAppUserById(sessionID.getSessionId()).get();
-        return examService.findAssigByUser(appUser).stream().map(ExamDTO::new).collect(Collectors.toList());
+        return examService.findExamByUser(appUser).stream().map(ExamDTO::new).collect(Collectors.toList());
     }
 
     @PostMapping("/addExam")
     public void addExam(@RequestBody SessionID sessionID) throws ParseException {
         AppUser appUser = appUserService.findAppUserById(sessionID.getSessionId()).get();
+        AllCourses allCourses = allCoursesService.findACourseByName(sessionID.getCourseName()).get();
 
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
         Date examDate = formatter.parse(sessionID.getExamDate());
 
-        Exam e = new Exam(null, examDate, sessionID.getExamDetails(), allCoursesService.findACourseByName(sessionID.getCourseName()).get(), appUser);
+        if(examService.findExamForSpecificCourseAndUser(allCourses, appUser).isPresent()){
+            examService.deleteExam(examService.findExamForSpecificCourseAndUser(allCourses, appUser).get());
+        }
+        Exam e = new Exam(null, examDate, sessionID.getExamDetails(), allCourses, appUser);
         examService.save(e);
     }
+
+    @PostMapping("/getExamForCourse")
+    public String getExamForCourse(@RequestBody SessionID sessionID){
+        AppUser appUser = appUserService.findAppUserById(sessionID.getSessionId()).get();
+        AllCourses allCourses = allCoursesService.findACourseByName(sessionID.getCourseName()).get();
+
+        if(examService.findExamForSpecificCourseAndUser(allCourses, appUser).isEmpty()){
+            return "no";
+        }else{
+            Exam exam = examService.findExamForSpecificCourseAndUser(allCourses, appUser).get();
+            ExamDTO examDTO = new ExamDTO(exam);
+            return examDTO.getDate();
+        }
+
+    }
+
+
 
     @DeleteMapping("/deleteExam")
     public void deleteExam(@RequestBody SessionID sessionID) {

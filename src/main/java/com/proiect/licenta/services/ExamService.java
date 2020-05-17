@@ -34,11 +34,11 @@ public class ExamService {
         repositoryFactory.createExamRepository().delete(exam);
     }
 
-    public List<Exam> findAssigsForSpecificCourseAndUser(AllCourses theCourse, AppUser appUser){
+    public Optional<Exam> findExamForSpecificCourseAndUser(AllCourses theCourse, AppUser appUser){
         return repositoryFactory.createExamRepository().findByAllCoursesAndAppUser(theCourse, appUser);
     }
 
-    public List<Exam> findAssigByUser(AppUser appUser){
+    public List<Exam> findExamByUser(AppUser appUser){
         return repositoryFactory.createExamRepository().findByAppUser(appUser);
     }
 
