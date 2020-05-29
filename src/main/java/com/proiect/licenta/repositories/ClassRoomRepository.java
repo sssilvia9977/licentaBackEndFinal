@@ -13,6 +13,7 @@ public interface ClassRoomRepository extends Repository<ClassRoom, Integer> {
     ClassRoom save(ClassRoom classRoom);
     List<ClassRoom> findAll();
     Optional<ClassRoom> findById(int id);
+    Optional<ClassRoom> findByClassRoomNameAndAddress(String classRoomName, String address);
     Optional<ClassRoom> findByClassRoomName(String name);
 
     void delete(ClassRoom classRoom);

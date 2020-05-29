@@ -6,6 +6,7 @@ import com.proiect.licenta.repositories.RepositoryFactory;
 import lombok.RequiredArgsConstructor;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.springframework.stereotype.Service;
 
@@ -37,7 +38,7 @@ public class ClassRoomService {
         return repositoryFactory.createClassRoomRepository().findByClassRoomName(name);
     }
 
-    public void saveFromExcel(XSSFSheet sheet, AppUser currentUser){
+    public void saveFromExcel(Sheet sheet, AppUser currentUser){
 
         Iterator<Row> rowIterator = sheet.iterator();
         rowIterator.next(); // skip the header row
@@ -54,7 +55,11 @@ public class ClassRoomService {
             } else {
                 classRoom = new ClassRoom(classRoomName.toString(), address.toString());
             }
-            save(classRoom);
+
+            if(repositoryFactory.createClassRoomRepository().findByClassRoomNameAndAddress(classRoomName.toString(), address.toString()).isEmpty()){
+                save(classRoom);
+            }
+
         }
     }
 

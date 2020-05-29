@@ -8,6 +8,7 @@ import com.proiect.licenta.repositories.RepositoryFactory;
 import lombok.RequiredArgsConstructor;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.springframework.stereotype.Service;
 
@@ -40,11 +41,7 @@ public class StructuraAnUniverService {
     }
 
 
-    public void saveFromExcel(XSSFSheet sheet, AppUser currentUSer){
-        /*
-        TODO: aici trebuie sa salvez universitatea studentului (sa o iau de fapt din tabela de uni)
-        pentru moment, am sa pun prima uni care e in baza de date
-         */
+    public void saveFromExcel(Sheet sheet, AppUser currentUSer){
 
         Iterator<Row> rowIterator = sheet.iterator();
         rowIterator.next(); // skip the header row
@@ -66,9 +63,12 @@ public class StructuraAnUniverService {
                 periodTypeString = SchoolPeriodType.EXAM;
             else periodTypeString = SchoolPeriodType.SCHOOL;
 
-            structuraAnUniversitar = new StructuraAnUniversitar(periodStart, periodEnd, periodTypeString ,
-                    currentUSer);
-            save(structuraAnUniversitar);
+            if(repositoryFactory.createStructuraAnUniversitarRepository().findByPeriodStartAndPeriodEndAndSchoolPeriodTypeAndAppUser(periodStart, periodEnd, periodTypeString, currentUSer).isEmpty()){
+                structuraAnUniversitar = new StructuraAnUniversitar(periodStart, periodEnd, periodTypeString ,
+                        currentUSer);
+                save(structuraAnUniversitar);
+            }
+
         }
 
 

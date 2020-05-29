@@ -6,7 +6,9 @@ import com.proiect.licenta.entities.choices.RecCategories;
 import com.proiect.licenta.services.*;
 import jdk.jfr.Category;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
@@ -24,20 +26,22 @@ public class Seed implements CommandLineRunner {
     private final ClassRoomService classRoomService;
     private final RecommendationService recommendationService;
 
+    private final PasswordEncoder passwordEncoder;
+
     @Override
     public void run(String... args) {
 
 /*
-        AppUser appUser = new AppUser(null, "Calin", "File de poveste", "print@ex.com", "Silvia", "a", 3, "Universitatea Tehnica din Cluj-Napoca", "Facultatea de automatica si calculatoare",null,null,null,null, null);
+        AppUser appUser = new AppUser(null, "Calin", "File de poveste", "print@ex.com", "Silvia", passwordEncoder.encode("a"), 3, "Universitatea Tehnica din Cluj-Napoca", "Facultatea de automatica si calculatoare",null,null,null,null, null);
         appUserServices.save(appUser);
         Assigment assigmentForUser1 = new Assigment(null, null, "Learn threads", "Do your beste to learn threads",
                 AssigStatus.NOTCompleted, appUser, null);
        // assigmentService.save(assigmentForUser1);
 
-        AppUser appUser2 = new AppUser(null, "Catalina", "Muritoare", "rudemari@ex.com", "fata", "parinti", 3, "Universitatea Tehnica din Cluj-Napoca", "Facultatea de automatica si calculatoare",null,null, null, null, null);
+        AppUser appUser2 = new AppUser(null, "Catalina", "Muritoare", "rudemari@ex.com", "maria", passwordEncoder.encode("a"), 3, "Universitatea Tehnica din Cluj-Napoca", "Facultatea de automatica si calculatoare",null,null, null, null, null);
         appUserServices.save(appUser2);
 
-        AppUser appUser3 = new AppUser(null, "Luceafarul", "Nemuriorul", "rece@ex.com", "dorinta", "igata", 3, "Universitatea Tehnica din Cluj-Napoca", "Facultatea de automatica si calculatoare", null,null,null,null, null);
+        AppUser appUser3 = new AppUser(null, "Luceafarul", "Nemuriorul", "rece@ex.com", "dorinta", passwordEncoder.encode("igata"), 3, "Universitatea Tehnica din Cluj-Napoca", "Facultatea de automatica si calculatoare", null,null,null,null, null);
         appUserServices.save(appUser3);
 
         Recommendation r1 = new Recommendation(null, "DownTown 25", "DownTown 25, Piața Unirii 4-5, Cluj-Napoca 400000", "Mi a placut tare", RecCategories.SPLURGE, appUser);
@@ -52,8 +56,8 @@ public class Seed implements CommandLineRunner {
         Recommendation r4 = new Recommendation(null, "Captain Bean", "22-26 Strada Regele Ferdinand Centru Cluj-Napoca Municipiul Cluj - Napoca Județul, Cluj-Napoca 400000", "Mi a placut tare", RecCategories.COFFEE_TOGO, appUser2);
         recommendationService.save(r4);
 
-*/
 
+*/
     }
 
 }

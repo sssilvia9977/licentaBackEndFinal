@@ -7,6 +7,7 @@ import com.proiect.licenta.repositories.RepositoryFactory;
 import lombok.RequiredArgsConstructor;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.springframework.stereotype.Service;
 
@@ -111,7 +112,9 @@ public class ScheduleService {
         return Optional.empty();
     }
 
-    public void saveFromExcel(XSSFSheet sheet, AppUser currentUser) {
+    public void saveFromExcel(Sheet sheet, AppUser currentUser) {
+
+        allCoursesService.findAllAllCoursesByUser(currentUser).forEach(allCoursesService::deleteAllCourse);
 
         Iterator<Row> rowIterator = sheet.iterator();
         rowIterator.next(); // skip the header row
@@ -145,10 +148,6 @@ public class ScheduleService {
                 classRoom = classRoomOptional.orElseGet(ClassRoom::new);
                     /*
                     TODO: salveaza classul demai sus
-                     */
-
-                    /*
-                    TODO: pune faculteatea de la care apartine userul curent
                      */
                 AllCourses aCourses;
                 if (allCoursesService.findACourseByName(courseNameString).isEmpty()) {

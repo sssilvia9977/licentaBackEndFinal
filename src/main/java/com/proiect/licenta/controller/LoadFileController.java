@@ -4,6 +4,7 @@ import com.proiect.licenta.entities.AppUser;
 import com.proiect.licenta.services.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.web.bind.annotation.*;
@@ -41,11 +42,11 @@ public class LoadFileController {
     public void mapExcelToDb(@RequestParam("file") MultipartFile reapExcelDataFile) throws IOException {
         XSSFWorkbook workbook = new XSSFWorkbook(reapExcelDataFile.getInputStream());
 
-        XSSFSheet orarSheet = null;
-        XSSFSheet saliSheet = null;
-        XSSFSheet structSheet = null ;
+        Sheet orarSheet = null;
+        Sheet saliSheet = null;
+        Sheet structSheet = null ;
 
-        for(XSSFSheet sheet : workbook) {
+        for(Sheet sheet : workbook) {
             if (sheet.getSheetName().contains("sal")) {
                 saliSheet = sheet;
             }

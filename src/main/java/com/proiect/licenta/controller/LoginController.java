@@ -4,6 +4,7 @@ import com.proiect.licenta.entities.AppUser;
 import com.proiect.licenta.services.AppUserServices;
 import com.proiect.licenta.services.SessionID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class LoginController {
 
     private final AppUserServices appUserServices;
+    private final PasswordEncoder passwordEncoder;
 
     @PostMapping(value = "/")
     public SessionID login(@RequestBody SessionID credentials){
@@ -25,7 +27,8 @@ public class LoginController {
 
         if(appUserServices.findUserByUsername(username).isPresent()){
             AppUser appUser = appUserServices.findUserByUsername(username).get();
-            if(appUser.getPassword().equals(password)){
+
+            if(passwordEncoder.matches(password, appUser.getPassword())){
                 sessionId.setSessionId(appUser.getAppUserId());
             }
 
