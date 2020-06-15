@@ -5,6 +5,7 @@ import com.proiect.licenta.entities.*;
 import com.proiect.licenta.entities.choices.AssigStatus;
 import com.proiect.licenta.services.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
@@ -27,10 +28,9 @@ public class UserDetailsController {
     private final BuildDTOs buildDTOs;
     private final RecommendationService recommendationService;
     private final ExamService examService;
+    private final PasswordEncoder passwordEncoder;
 
-
-    //TODO: cand adaugi un user nou, universitatea gaseste o in functie de facultate, ca nu poti sa ai un user la facX,univZ
-    // facX sa nu aparatina la univZ
+    
 
     @PostMapping(value = "/getUsername")
     public AppUserDTO returnUsername(@RequestBody SessionID sessionID) {
@@ -62,7 +62,8 @@ public class UserDetailsController {
             return status;
         }
 
-        AppUser appUser = new AppUser(null, sessionID.getFname(), sessionID.getLname(), sessionID.getEmail(), sessionID.getUsername(), sessionID.getPassword(), 0, sessionID.getUni(), sessionID.getFaculty(),
+        AppUser appUser = new AppUser(null, sessionID.getFname(), sessionID.getLname(), sessionID.getEmail(), sessionID.getUsername(),
+                passwordEncoder.encode(sessionID.getPassword()), 0, sessionID.getUni(), sessionID.getFaculty(),
                 null, null, null, null, null);
         appUserService.save(appUser);
         return status;
@@ -140,21 +141,12 @@ public class UserDetailsController {
 
     @PostMapping("/getCourseDetails")
     public CourseDTO getCourseDetails(@RequestBody SessionID sessionID) {
-        /*
-        Ce trimit de pe fe, e numele intreg al cursului
-
-        TODO: assgments pe un alt url eventual
-         */
-
-        AllCourses currentCourse = allCoursesService.findACourseByName(sessionID.getCourseName()).get();
-
         int id = sessionID.getSessionId();
         AppUser appUser = appUserService.findAppUserById(id).get();
+        AllCourses currentCourse = allCoursesService.findCourseByNameAndAppUser(sessionID.getCourseName(), appUser).get();
 
         CourseDTO courseDTO = buildDTOs.makeCourseDetailsDTO(appUser, currentCourse);
         return courseDTO;
-
-
     }
 
 
@@ -165,7 +157,6 @@ public class UserDetailsController {
         AppUser appUser = appUserService.findAppUserById(id).get();
 
         return buildDTOs.buildScheduleDTO(appUser);
-
     }
 
 
@@ -199,7 +190,7 @@ public class UserDetailsController {
         int id = sessionID.getSessionId();
         AppUser appUser = appUserService.findAppUserById(id).get();
 
-        AllCourses currentCourse = allCoursesService.findACourseByName(sessionID.getCourseName()).get();
+        AllCourses currentCourse = allCoursesService.findCourseByNameAndAppUser(sessionID.getCourseName(), appUser).get();
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
         Date assigDate = formatter.parse(sessionID.getAssigDeadline());
         return assigmentService.save(new Assigment(null, assigDate, sessionID.getAssigTitle(), sessionID.getAssigDescription(),
@@ -262,7 +253,7 @@ public class UserDetailsController {
     @PostMapping("/addExam")
     public void addExam(@RequestBody SessionID sessionID) throws ParseException {
         AppUser appUser = appUserService.findAppUserById(sessionID.getSessionId()).get();
-        AllCourses allCourses = allCoursesService.findACourseByName(sessionID.getCourseName()).get();
+        AllCourses allCourses = allCoursesService.findCourseByNameAndAppUser(sessionID.getCourseName(), appUser).get();
 
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
         Date examDate = formatter.parse(sessionID.getExamDate());
@@ -277,7 +268,7 @@ public class UserDetailsController {
     @PostMapping("/getExamForCourse")
     public String getExamForCourse(@RequestBody SessionID sessionID){
         AppUser appUser = appUserService.findAppUserById(sessionID.getSessionId()).get();
-        AllCourses allCourses = allCoursesService.findACourseByName(sessionID.getCourseName()).get();
+        AllCourses allCourses = allCoursesService.findCourseByNameAndAppUser(sessionID.getCourseName(), appUser).get();
 
         if(examService.findExamForSpecificCourseAndUser(allCourses, appUser).isEmpty()){
             return "no";

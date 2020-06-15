@@ -58,7 +58,7 @@ public class BuildDTOs {
                     courseAbreviere += si.substring(0,1).toUpperCase();
                 }
 
-                AllCourses theCourse  = allCoursesService.findACourseByName(courseName).get();
+                AllCourses theCourse  = allCoursesService.findCourseByNameAndAppUser(courseName, appUser).get();
                 String courseClassRoom = "";
                 String courseAddress = "";
                 String courseAddressDetails = "";

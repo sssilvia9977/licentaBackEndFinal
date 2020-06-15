@@ -39,7 +39,9 @@ public class LoadFileController {
     }
 
     @PostMapping(value = "/importExcel")
-    public void mapExcelToDb(@RequestParam("file") MultipartFile reapExcelDataFile) throws IOException {
+    public String mapExcelToDb(@RequestParam("file") MultipartFile reapExcelDataFile) throws IOException {
+
+        String statusMessage = "Your schedule has been uploaded!";
         XSSFWorkbook workbook = new XSSFWorkbook(reapExcelDataFile.getInputStream());
 
         Sheet orarSheet = null;
@@ -63,6 +65,7 @@ public class LoadFileController {
         structuraAnUniverService.saveFromExcel(structSheet, currentUser);
         scheduleService.saveFromExcel(orarSheet, currentUser);
 
+        return statusMessage;
 
     }
 

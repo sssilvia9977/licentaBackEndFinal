@@ -50,7 +50,7 @@ public class ScheduleService {
         return repositoryFactory.createScheduleRepository().findByAppUser(appUser);
     }
 
-    public List<String> findCourseNameAndTypeForSpecificSchedule(Schedule s){
+    public List<String> findCourseNameAndTypeForSpecificSchedule(Schedule s) {
         List<String> result = new ArrayList<>();
         String courseType = "";
         String courseName = "";
@@ -72,7 +72,6 @@ public class ScheduleService {
         return result;
 
     }
-
 
 
     public Optional<CourseLecture> getUsersLectureForSpecificCourse(AppUser appUser, AllCourses theCourse) {
@@ -119,103 +118,142 @@ public class ScheduleService {
         Iterator<Row> rowIterator = sheet.iterator();
         rowIterator.next(); // skip the header row
         while (rowIterator.hasNext()) {
-
             Schedule schedule;
-            Row nextRow = rowIterator.next();
+            String day = "";
+            String hourStart = "";
+            String hourEnd = "";
+            String courseNameString = "";
+            String courseTypeString = "";
+            String professorString = "";
+            String classRoomString = "";
 
+            boolean continueHere = true;
+
+            Row nextRow = rowIterator.next();
             Iterator<Cell> cellIterator = nextRow.cellIterator();
 
-            String day = cellIterator.next().getStringCellValue();
-            String hourStart = cellIterator.next().getStringCellValue();
-            String hourEnd = cellIterator.next().getStringCellValue();
+            if (cellIterator.hasNext()) day = cellIterator.next().getStringCellValue();
+            else {
+                continueHere = false;
+                rowIterator.next();
+            }
+            if (cellIterator.hasNext()) hourStart = cellIterator.next().getStringCellValue();
+            else {
+                continueHere = false;
+                rowIterator.next();
+            }
+            if (cellIterator.hasNext()) hourEnd = cellIterator.next().getStringCellValue();
+            else {
+                continueHere = false;
+                rowIterator.next();
+            }
+            if (cellIterator.hasNext()) courseNameString = cellIterator.next().toString();
+            else {
+                continueHere = false;
+                rowIterator.next();
+            }
+            if (cellIterator.hasNext()) courseTypeString = cellIterator.next().toString();
+            else {
+                continueHere = false;
+                rowIterator.next();
+            }
+            if (cellIterator.hasNext()) professorString = cellIterator.next().toString();
+            else {
+                continueHere = false;
+                rowIterator.next();
+            }
+            if (cellIterator.hasNext()) classRoomString = cellIterator.next().toString();
+            else {
+                continueHere = false;
+                rowIterator.next();
+            }
 
-            String courseNameString = cellIterator.next().getStringCellValue();
-            String courseTypeString = cellIterator.next().toString();
-            String professorString = cellIterator.next().getStringCellValue();
-            String classRoomString = cellIterator.next().toString();
 
             String weekOdd = WeekType.ALWAYS;
-            if (cellIterator.hasNext()) {
+           /* if (cellIterator.hasNext()) {
                 if (cellIterator.next().toString().equals("odd"))
                     weekOdd = WeekType.ODD;
                 else
                     weekOdd = WeekType.EVEN;
-            }
+            }*/
 
-            try {
-                ClassRoom classRoom;
-                Optional<ClassRoom> classRoomOptional = classRoomService.findClassRoomByName(classRoomString);
-                classRoom = classRoomOptional.orElseGet(ClassRoom::new);
-                    /*
-                    TODO: salveaza classul demai sus
-                     */
-                AllCourses aCourses;
-                if (allCoursesService.findACourseByName(courseNameString).isEmpty()) {
-                    aCourses = new AllCourses(courseNameString, currentUser);
-                    allCoursesService.save(aCourses);
-                } else
-                    aCourses = allCoursesService.findACourseByName(courseNameString).get();
+            if (continueHere) {
+                try {
+                    ClassRoom classRoom;
+                    Optional<ClassRoom> classRoomOptional = classRoomService.findClassRoomByName(classRoomString);
+                    if (classRoomOptional.isEmpty()) {
+                        classRoom = new ClassRoom(classRoomString);
+                        classRoomService.save(classRoom);
+                    } else classRoom = classRoomOptional.get();
 
-
-                Professor professor;
-                if (professorService.findProfessorByName(professorString).isEmpty()) {
-                    professor = new Professor(professorString);
-                    professorService.save(professor);
-                } else
-                    professor = professorService.findProfessorByName(professorString).get();
+                    AllCourses aCourses;
+                    if (allCoursesService.findCourseByNameAndAppUser(courseNameString, currentUser).isEmpty()) {
+                        aCourses = new AllCourses(courseNameString, currentUser);
+                        allCoursesService.save(aCourses);
+                    } else
+                        aCourses = allCoursesService.findCourseByNameAndAppUser(courseNameString, currentUser).get();
 
 
-                int lectureID;
-                int laboratoryID;
-                int seminaryID;
-                switch (courseTypeString) {
-                    case "0.0": //lecture
-                        if (lectureService.findCourseLectureById(aCourses.getId()).isPresent()
-                                && lectureService.findCourseLectureById(aCourses.getId()).get().getClassRoom().getClassRoomName().equals(classRoomString)
-                                && lectureService.findCourseLectureById(aCourses.getId()).get().getProfessor().getName().equals(professorString)
-                        ) {
-                            lectureID = lectureService.findCourseLectureById(aCourses.getId()).get().getId();
-                        } else {
-                            CourseLecture courseLecture = new CourseLecture(aCourses, professor, classRoom);
-                            lectureService.save(courseLecture);
-                            lectureID = courseLecture.getId();
-                        }
-                        schedule = new Schedule(day, hourStart, hourEnd, weekOdd, lectureService.findCourseLectureById(lectureID).get(), currentUser);
-                        save(schedule);
-                        break;
+                    Professor professor;
+                    if (professorService.findProfessorByName(professorString).isEmpty()) {
+                        professor = new Professor(professorString);
+                        professorService.save(professor);
+                    } else
+                        professor = professorService.findProfessorByName(professorString).get();
 
-                    case "1.0": //laboratory
-                        if (laboratoryService.findCourseLaboratoryById(aCourses.getId()).isPresent()
-                                && laboratoryService.findCourseLaboratoryById(aCourses.getId()).get().getClassRoom().getClassRoomName().equals(classRoomString)
-                                && laboratoryService.findCourseLaboratoryById(aCourses.getId()).get().getProfessor().getName().equals(professorString)
-                        ) {
-                            laboratoryID = laboratoryService.findCourseLaboratoryById(aCourses.getId()).get().getId();
-                        } else {
-                            CourseLaboratory courseLaboratory = new CourseLaboratory(aCourses, professor, classRoom);
-                            laboratoryService.save(courseLaboratory);
-                            laboratoryID = courseLaboratory.getId();
-                        }
-                        schedule = new Schedule(day, hourStart, hourEnd, weekOdd, laboratoryService.findCourseLaboratoryById(laboratoryID).get(), currentUser);
-                        save(schedule);
-                        break;
 
-                    case "2.0": //seminary
-                        if (seminaryService.findCourseSeminaryById(aCourses.getId()).isPresent()
-                                && seminaryService.findCourseSeminaryById(aCourses.getId()).get().getClassRoom().getClassRoomName().equals(classRoomString)
-                                && seminaryService.findCourseSeminaryById(aCourses.getId()).get().getProfessor().getName().equals(professorString)
-                        ) {
-                            seminaryID = seminaryService.findCourseSeminaryById(aCourses.getId()).get().getId();
-                        } else {
-                            CourseSeminary courseSeminary = new CourseSeminary(aCourses, professor, classRoom);
-                            seminaryService.save(courseSeminary);
-                            seminaryID = courseSeminary.getId();
-                        }
-                        schedule = new Schedule(day, hourStart, hourEnd, weekOdd, seminaryService.findCourseSeminaryById(seminaryID).get(), currentUser);
-                        save(schedule);
-                        break;
+                    int lectureID;
+                    int laboratoryID;
+                    int seminaryID;
+                    switch (courseTypeString) {
+                        case "0.0": //lecture
+                            if (lectureService.findCourseLectureById(aCourses.getId()).isPresent()
+                                    && lectureService.findCourseLectureById(aCourses.getId()).get().getClassRoom().getClassRoomName().equals(classRoomString)
+                                    && lectureService.findCourseLectureById(aCourses.getId()).get().getProfessor().getName().equals(professorString)
+                            ) {
+                                lectureID = lectureService.findCourseLectureById(aCourses.getId()).get().getId();
+                            } else {
+                                CourseLecture courseLecture = new CourseLecture(aCourses, professor, classRoom);
+                                lectureService.save(courseLecture);
+                                lectureID = courseLecture.getId();
+                            }
+                            schedule = new Schedule(day, hourStart, hourEnd, weekOdd, lectureService.findCourseLectureById(lectureID).get(), currentUser);
+                            save(schedule);
+                            break;
+
+                        case "1.0": //laboratory
+                            if (laboratoryService.findCourseLaboratoryById(aCourses.getId()).isPresent()
+                                    && laboratoryService.findCourseLaboratoryById(aCourses.getId()).get().getClassRoom().getClassRoomName().equals(classRoomString)
+                                    && laboratoryService.findCourseLaboratoryById(aCourses.getId()).get().getProfessor().getName().equals(professorString)
+                            ) {
+                                laboratoryID = laboratoryService.findCourseLaboratoryById(aCourses.getId()).get().getId();
+                            } else {
+                                CourseLaboratory courseLaboratory = new CourseLaboratory(aCourses, professor, classRoom);
+                                laboratoryService.save(courseLaboratory);
+                                laboratoryID = courseLaboratory.getId();
+                            }
+                            schedule = new Schedule(day, hourStart, hourEnd, weekOdd, laboratoryService.findCourseLaboratoryById(laboratoryID).get(), currentUser);
+                            save(schedule);
+                            break;
+
+                        case "2.0": //seminary
+                            if (seminaryService.findCourseSeminaryById(aCourses.getId()).isPresent()
+                                    && seminaryService.findCourseSeminaryById(aCourses.getId()).get().getClassRoom().getClassRoomName().equals(classRoomString)
+                                    && seminaryService.findCourseSeminaryById(aCourses.getId()).get().getProfessor().getName().equals(professorString)
+                            ) {
+                                seminaryID = seminaryService.findCourseSeminaryById(aCourses.getId()).get().getId();
+                            } else {
+                                CourseSeminary courseSeminary = new CourseSeminary(aCourses, professor, classRoom);
+                                seminaryService.save(courseSeminary);
+                                seminaryID = courseSeminary.getId();
+                            }
+                            schedule = new Schedule(day, hourStart, hourEnd, weekOdd, seminaryService.findCourseSeminaryById(seminaryID).get(), currentUser);
+                            save(schedule);
+                            break;
+                    }
+                } catch (Exception e) {
+                    System.out.println(day + " " + hourStart + " " + hourEnd + " " + courseNameString + " " + courseTypeString + " " + professorString + " " + classRoomString + " " + weekOdd);
                 }
-            } catch (Exception e) {
-                System.out.println(day + " " + hourStart + " " + hourEnd + " " + courseNameString + " " + courseTypeString + " " + professorString + " " + classRoomString + " " + weekOdd);
             }
 
 

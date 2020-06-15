@@ -31,7 +31,7 @@ public class Seed implements CommandLineRunner {
     @Override
     public void run(String... args) {
 
-/*
+
         AppUser appUser = new AppUser(null, "Calin", "File de poveste", "print@ex.com", "Silvia", passwordEncoder.encode("a"), 3, "Universitatea Tehnica din Cluj-Napoca", "Facultatea de automatica si calculatoare",null,null,null,null, null);
         appUserServices.save(appUser);
         Assigment assigmentForUser1 = new Assigment(null, null, "Learn threads", "Do your beste to learn threads",
@@ -57,7 +57,7 @@ public class Seed implements CommandLineRunner {
         recommendationService.save(r4);
 
 
-*/
+
     }
 
 }

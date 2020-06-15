@@ -14,5 +14,6 @@ public interface AllCoursesRepository extends Repository<AllCourses, Integer> {
         List<AllCourses> findAllByAppUser(AppUser appUser);
         Optional<AllCourses> findById(int id);
         Optional<AllCourses> findByName(String name);
+        Optional<AllCourses> findByNameAndAppUser(String name, AppUser appuser);
         void delete(AllCourses allCourses);
 }

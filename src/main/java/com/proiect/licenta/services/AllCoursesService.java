@@ -17,9 +17,6 @@ public class AllCoursesService {
 
 
     private final RepositoryFactory repositoryFactory;
-    private final CourseLectureService courseLectureService;
-    private final CourseLaboratoryService courseLaboratoryService;
-    private final CourseSeminaryService courseSeminaryService;
 
     public AllCourses save(AllCourses allCourses) {
         return repositoryFactory.createAllCoursesRepository().save(allCourses);
@@ -41,10 +38,16 @@ public class AllCoursesService {
         return repositoryFactory.createAllCoursesRepository().findByName(name);
     }
 
+    public Optional<AllCourses> findCourseByNameAndAppUser(String name, AppUser appUser) {
+        return repositoryFactory.createAllCoursesRepository().findByNameAndAppUser(name, appUser);
+    }
+
 
     public List<AllCourses> findAllAllCoursesByUser(AppUser appUser) {
         return repositoryFactory.createAllCoursesRepository().findAllByAppUser(appUser);
     }
+
+
 
 
 }

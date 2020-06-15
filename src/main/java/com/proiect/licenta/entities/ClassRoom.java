@@ -44,6 +44,9 @@ public class ClassRoom {
         this.address = address;
     }
 
+    public ClassRoom(String classRoomName){
+        this.classRoomName = classRoomName;
+    }
 
 
     @Override

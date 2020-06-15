@@ -18,11 +18,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests().anyRequest().authenticated().and()//.formLogin().loginPage("/").permitAll();
+        http.authorizeRequests().antMatchers("/addUser", "/sendSessionID", "/nameExcel", "/importExcel", "/checkUniq",  "/getAllRec", "/getRecPostedByUser",
+                "/addRec", "/deleteRec", "/getAllCategories",  "/getRecEAT_CHEAP", "/getRecDISCO", "/getRecCONCERT", "/getRecCOFFEE_STUDY", "/getRecCOFFEE_TOGO", "/getRecRESTAURANT",
+                "/getRecSPLURGE", "/getUsername", "/updateUser","/getCourses","/getCourseDetails", "/getSchedule", "/getStructAnUniv", "/setAssigStatus",
+                "/addAssig", "/deleteAssig", "/updateAssig", "/getAllAssigs", "/getExam", "/addExam", "/getExamForCourse", "/deleteExam"
+        ).permitAll()
+                .anyRequest().authenticated().and()//.formLogin().loginPage("/").permitAll();
                 .httpBasic().and()
                 // next line disables session creation (forces true HTTP Basic behavior)
                 .cors().and()
                 .csrf().disable();
+
     }
 
     @Override
